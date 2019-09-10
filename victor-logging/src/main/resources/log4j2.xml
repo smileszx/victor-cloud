@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="debug">
+    <Properties>
+        <Property name="fileName">victor-logging.log</Property>
+        <Property name="backupFilePatch">./data/logs/victor-logging/log/</Property>
+    </Properties>
+    <appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <ThresholdFilter level="trace" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %t [%p] %c (%F:%L) %msg%n"/>
+        </Console>
+        <RollingFile name="RollingFile" fileName="${backupFilePatch}${fileName}"
+                     filePattern="${backupFilePatch}$${date:yyyy-MM}/victor-%d{yyyyMMddHHmmssSSS}.log.gz">
+            <PatternLayout pattern="%d{yyyy.MM.dd 'at' HH:mm:ss.SSS z} %-5level %class{36} %L %M - %msg%xEx%n"/>
+            <SizeBasedTriggeringPolicy size="20MB"/>
+            <DefaultRolloverStrategy max="20"/>
+        </RollingFile>
+        <!--<RandomAccessFile name="RandomAccessFile" fileName="./data/logs/victor-logging/log/random.log" immediateFlush="false" append="false">-->
+            <!--<PatternLayout pattern="%d{yyyy.MM.dd 'at' HH:mm:ss.SSS z} %-5level %class{36} %L %M - %msg%xEx%n"/>-->
+        <!--</RandomAccessFile>-->
+    </appenders>
+    <loggers>
+        <Root level="info" includeLocation="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingFile"/>
+            <!--<AppenderRef ref="RandomAccessFile"/>-->
+        </Root>
+        <!--<Logger name="com.micro.logger.LoggingClient" level="info" includeLocation="false">-->
+            <!--<AppenderRef ref="RandomAccessFile"/>-->
+        <!--</Logger>-->
+    </loggers>
+</configuration>
