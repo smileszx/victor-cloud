@@ -1,32 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration status="debug">
+<Configuration status="debug" strict="true" name="XMLConfigTest"
+               packages="com.micro.logger.LoggingClient">
+    <!-- 全局属性值 -->
     <Properties>
-        <Property name="fileName">victor-logging.log</Property>
-        <Property name="backupFilePatch">./data/logs/victor-logging/log/</Property>
+        <!-- 日志文件路径 -->
+        <Property name="filename">logs/config/xml/test.log</Property>
     </Properties>
-    <appenders>
-        <Console name="Console" target="SYSTEM_OUT">
-            <ThresholdFilter level="trace" onMatch="ACCEPT" onMismatch="DENY"/>
-            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %t [%p] %c (%F:%L) %msg%n"/>
-        </Console>
-        <RollingFile name="RollingFile" fileName="${backupFilePatch}${fileName}"
-                     filePattern="${backupFilePatch}$${date:yyyy-MM}/victor-%d{yyyyMMddHHmmssSSS}.log.gz">
-            <PatternLayout pattern="%d{yyyy.MM.dd 'at' HH:mm:ss.SSS z} %-5level %class{36} %L %M - %msg%xEx%n"/>
-            <SizeBasedTriggeringPolicy size="20MB"/>
-            <DefaultRolloverStrategy max="20"/>
-        </RollingFile>
-        <!--<RandomAccessFile name="RandomAccessFile" fileName="./data/logs/victor-logging/log/random.log" immediateFlush="false" append="false">-->
-            <!--<PatternLayout pattern="%d{yyyy.MM.dd 'at' HH:mm:ss.SSS z} %-5level %class{36} %L %M - %msg%xEx%n"/>-->
-        <!--</RandomAccessFile>-->
-    </appenders>
-    <loggers>
-        <Root level="info" includeLocation="false">
-            <AppenderRef ref="Console"/>
-            <AppenderRef ref="RollingFile"/>
-            <!--<AppenderRef ref="RandomAccessFile"/>-->
+    <Filter type="ThresholdFilter" level="trace"/>
+
+    <Appenders>
+        <Appender type="Console" name="STDOUT">
+            <Layout type="PatternLayout" pattern="%m MDC%X%n"/>
+            <Filters>
+                <Filter type="MarkerFilter" marker="FLOW" onMatch="DENY" onMismatch="NEUTRAL"/>
+                <Filter type="MarkerFilter" marker="EXCEPTION" onMatch="DENY" onMismatch="ACCEPT"/>
+            </Filters>
+        </Appender>
+        <Appender type="Console" name="FLOW">
+            <Layout type="PatternLayout" pattern="%C{1}.%M %m %ex%n"/><!-- class and line number -->
+            <Filters>
+                <Filter type="MarkerFilter" marker="FLOW" onMatch="ACCEPT" onMismatch="NEUTRAL"/>
+                <Filter type="MarkerFilter" marker="EXCEPTION" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Filters>
+        </Appender>
+        <Appender type="File" name="File" fileName="${filename}">
+            <Layout type="PatternLayout">
+                <Pattern>%d %p %C{1.} [%t] %m%n</Pattern>
+            </Layout>
+        </Appender>
+    </Appenders>
+
+    <Loggers>
+        <Logger name="com.micro.logger.LoggingClient" level="debug" additivity="false">
+            <Filter type="ThreadContextMapFilter">
+                <KeyValuePair key="test" value="123"/>
+            </Filter>
+            <AppenderRef ref="STDOUT"/>
+        </Logger>
+
+        <Logger name="com.micro.LogSystemClient" level="debug" additivity="false">
+            <AppenderRef ref="File"/>
+        </Logger>
+
+        <Root level="trace">
+            <AppenderRef ref="STDOUT"/>
         </Root>
-        <!--<Logger name="com.micro.logger.LoggingClient" level="info" includeLocation="false">-->
-            <!--<AppenderRef ref="RandomAccessFile"/>-->
-        <!--</Logger>-->
-    </loggers>
-</configuration>
+    </Loggers>
+
+</Configuration>

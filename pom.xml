@@ -54,6 +54,7 @@
         </dependency>
     </dependencies>
 
+    <!-- 依赖管理 -->
     <dependencyManagement>
         <dependencies>
             <dependency>
