@@ -21,6 +21,7 @@ public class JedisTest {
         jedis.set("zhejiangweishi", "中国好声音");
         jedis.hset("lironghao","李凡一","你的酒馆对我打了烊");
         jedis.set("28", "二八定律");
+        jedis.sadd("DevOps", "开发", "运维");
 
         LOGGER.error(String.valueOf(jedis.keys("*")));
 
