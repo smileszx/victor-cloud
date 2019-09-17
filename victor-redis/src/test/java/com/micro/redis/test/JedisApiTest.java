@@ -4,8 +4,10 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.Transaction;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -103,4 +105,67 @@ public class JedisApiTest {
         LOGGER.error(String.valueOf(jedis.zrangeByScoreWithScores("zset", 0, 100)));
 
     }
+
+    @Test
+    public void testRedisSet() {
+        if(jedis.exists("set"))
+            jedis.del("set");
+        jedis.sadd("set", "曹操", "孙权", "刘备", "刘备");
+
+        LOGGER.error(String.valueOf(jedis.smembers("set")));
+    }
+
+    @Test
+    public void testSetNX() {
+        if(jedis.exists("lock"))
+            jedis.del("lock");
+
+        Long first = jedis.setnx("lock", "和氏璧");
+
+        LOGGER.error(first + jedis.get("lock") + jedis.exists("lock"));
+
+        Long second = jedis.setnx("lock", "和氏璧");
+
+        LOGGER.error(second + jedis.get("lock") + jedis.exists("lock"));
+
+
+
+    }
+
+    @Test
+    public void testMulti() {
+        //Redis 事务
+        Transaction tx =jedis.multi();
+
+        tx.mset("a", "1", "b", "2");
+
+        tx.sadd("c", "3", "4");
+
+        tx.exec();
+
+        LOGGER.error("提交事务后：" + jedis.mget("a", "b") + " , " + jedis.smembers("c"));
+
+    }
+
+    @Test
+    public void testWatch() throws InterruptedException {
+        //监控键值，如果发生变化，事务不执行，实现乐观锁
+        String wr = jedis.watch("jay");
+
+        LOGGER.error(wr);
+
+
+        Thread.sleep(2000);
+
+
+        Transaction tx = jedis.multi();
+
+        tx.set("jay", "123");
+
+        List<Object> r = tx.exec();
+
+        LOGGER.error(jedis.get("jay") + ", exec结果：" + r);
+
+    }
+
 }
