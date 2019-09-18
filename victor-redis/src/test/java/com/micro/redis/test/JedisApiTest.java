@@ -4,6 +4,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.Pipeline;
 import redis.clients.jedis.Transaction;
 
 import java.util.HashMap;
@@ -11,14 +12,15 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Description TODO
+ * @Description
+ * 测试Jedis常用接口，对应Redis命令行
  * @Author victor su
  * @Date 2019/9/16 22:11
  **/
 public class JedisApiTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(JedisApiTest.class);
 
-    private static Jedis jedis = new Jedis("192.168.1.101", 6379, 10000);
+    private static Jedis jedis = new Jedis("192.168.1.105", 6379, 10000);
 
     /**
      * String
@@ -166,6 +168,27 @@ public class JedisApiTest {
 
         LOGGER.error(jedis.get("jay") + ", exec结果：" + r);
 
+    }
+
+    @Test
+    public void testPipeLine () {
+//        long currentTimeMillis = System.currentTimeMillis();
+//        for (int i = 0; i < 1000; i++) {
+//            jedis.set("test" + i, "test" + i);
+//        }
+//        long endTimeMillis = System.currentTimeMillis();
+//        System.out.println(endTimeMillis - currentTimeMillis);
+
+
+        //使用管道
+        long currentTimeMillis = System.currentTimeMillis();
+        Pipeline pipelined = jedis.pipelined();
+        for (int i = 0; i < 100000; i++) {
+            pipelined.set("bb" + i, i + "bb");
+        }
+        pipelined.sync();
+        long endTimeMillis = System.currentTimeMillis();
+        System.out.println(endTimeMillis - currentTimeMillis);
     }
 
 }
