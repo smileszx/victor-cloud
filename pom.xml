@@ -16,6 +16,7 @@
 
     <properties>
         <junit.version>4.12</junit.version>
+        <lombok.version>1.18.8</lombok.version>
         <!-- 日志框架 -->
         <log4j2.version>2.12.1</log4j2.version>
         <slf4j.version>1.7.25</slf4j.version>
@@ -35,6 +36,13 @@
             <artifactId>junit</artifactId>
             <version>${junit.version}</version>
             <scope>test</scope>
+        </dependency>
+        <!-- 简化代码Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
         </dependency>
         <!-- slf4j核心包-->
         <dependency>

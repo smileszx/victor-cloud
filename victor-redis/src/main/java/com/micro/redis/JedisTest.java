@@ -1,8 +1,11 @@
 package com.micro.redis;
 
+import com.micro.redis.demo.ArticleInfo;
+import com.micro.redis.demo.ResultMsg;
+import com.micro.redis.service.PublishArticleService;
+import com.micro.redis.service.impl.PublishArticleServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import redis.clients.jedis.Jedis;
 
 /**
  * @Description TODO
@@ -14,18 +17,19 @@ public class JedisTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(JedisTest.class);
 
     public static void main(String[] args) {
-        Jedis jedis = new Jedis("192.168.1.101", 6379, 10000);
+        ArticleInfo info = new ArticleInfo();
+        info.setArticleId((long) 1)
+                .setTitle("深入学习Redis")
+                .setLink("http://www.baidu.con")
+                .setPoster("user:88238")
+                .setTime(Double.valueOf(System.currentTimeMillis()))
+                .setVotes(24342);
 
-        jedis.flushAll();
+        PublishArticleService service = new PublishArticleServiceImpl();
 
-        jedis.set("zhejiangweishi", "中国好声音");
-        jedis.hset("lironghao","李凡一","你的酒馆对我打了烊");
-        jedis.set("28", "二八定律");
-        jedis.sadd("DevOps", "开发", "运维");
+        ResultMsg msg = service.publishArticle(info);
 
-        LOGGER.error(String.valueOf(jedis.keys("*")));
-
-        LOGGER.info("Jedis server: {}", jedis.ping());
+        LOGGER.error(msg.toString());
 
     }
 }
