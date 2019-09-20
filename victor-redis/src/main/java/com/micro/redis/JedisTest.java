@@ -27,9 +27,11 @@ public class JedisTest {
 
         PublishArticleService service = new PublishArticleServiceImpl();
 
-        ResultMsg msg = service.publishArticle(info);
+        ResultMsg msg1 = service.publishArticle(info);
+        ResultMsg msg2 = service.publishArticle(info);
 
-        LOGGER.error(msg.toString());
+        LOGGER.error(msg1.toString());
+        LOGGER.error(msg2.toString());
 
     }
 }
