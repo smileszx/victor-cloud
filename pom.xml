@@ -13,6 +13,7 @@
         <module>victor-mq</module>
         <module>victor-redis</module>
         <module>victor-web</module>
+        <module>victor-dubbo-provider</module>
     </modules>
 
     <properties>
