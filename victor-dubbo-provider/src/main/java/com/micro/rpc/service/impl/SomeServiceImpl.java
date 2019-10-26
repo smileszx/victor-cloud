@@ -2,6 +2,7 @@ package com.micro.rpc.service.impl;
 
 import com.micro.rpc.service.SomeService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 /**
  * @Description
@@ -10,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
  * @Date 2019/10/24 22:32
  **/
 @Slf4j
+@Service
 public class SomeServiceImpl implements SomeService{
     @Override
     public String sayHello(String msg) {

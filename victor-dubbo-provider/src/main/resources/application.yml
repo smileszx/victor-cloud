@@ -1,0 +1,13 @@
+server:
+  port: 8080
+spring:
+  dubbo:
+    application:
+      name: spring-dubbo-provider
+    registry:
+      address: zookeeper://192.168.1.160
+      port: 2181
+    protocol:
+      name: dubbo
+      port: 20890
+    scan: com.micro.rpc.service.impl
