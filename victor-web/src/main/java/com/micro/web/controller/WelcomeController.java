@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * @Description
  * 测试Controller
+ * WebSocket应用安全问题分析:
+ * https://segmentfault.com/p/1210000010744871/read
+ *
  * @Author victor su
  * @Date 2019/10/16 23:15
  **/
