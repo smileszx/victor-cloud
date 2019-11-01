@@ -18,4 +18,9 @@ public class SomeServiceImpl implements SomeService{
         log.info("My name is dubbo provider service.");
         return "Hello, " + msg;
     }
+
+    @Override
+    public Integer getId(String name) {
+        return name.hashCode();
+    }
 }

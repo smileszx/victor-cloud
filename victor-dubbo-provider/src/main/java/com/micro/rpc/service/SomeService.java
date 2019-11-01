@@ -8,4 +8,6 @@ package com.micro.rpc.service;
  **/
 public interface SomeService {
     String sayHello (String msg);
+
+    Integer getId (String name);
 }
